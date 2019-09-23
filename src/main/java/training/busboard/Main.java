@@ -13,6 +13,7 @@ public class Main {
 
         String name = client.target("https://api.tfl.gov.uk/StopPoint/490008660N/Arrivals").request(MediaType.TEXT_PLAIN).get(String.class);
 
-     //System.out.println(name);
+     System.out.println(name);
+
     }
 }	
