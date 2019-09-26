@@ -44,28 +44,34 @@ public class Main {
         //api.postcodes.io/postcodes/po203xb
 
         Client client = ClientBuilder.newBuilder().register(JacksonFeature.class).sslContext(sslcontext).hostnameVerifier((s1, s2) -> true).build();
-
-        Postcode postCode = client.target("https://api.postcodes.io/postcodes/po203xb")
+//
+//        Postcode postCode = client.target("https://api.postcodes.io/postcodes/po203xb")
+//                .request(MediaType.APPLICATION_JSON_TYPE)
+//                .get(Postcode.class);
+//
+//        System.out.println(postCode.result.latitude);
+//        System.out.println(postCode.result.longitude);
+//
+        StopPoint stops = client.target("https://api.tfl.gov.uk/StopPoint?stopTypes=NaptanPublicBusCoachTram&lat=50.840588&lon=-0.657379")
                 .request(MediaType.APPLICATION_JSON_TYPE)
-                .get(Postcode.class);
-
-        System.out.println(postCode.result.latitude);
-        System.out.println(postCode.result.longitude);
-
-
-
-        List<BusInfo> response = client.target("https://api.tfl.gov.uk/StopPoint/490008660N/Arrivals")
-                .request(MediaType.APPLICATION_JSON_TYPE)
-                .get(new GenericType<List<BusInfo>>() {});
-
-        Comparator<BusInfo> compareByTime = Comparator.comparing(BusInfo::getTimeToStation);
-
-        response.sort(compareByTime);
-
-        for (int i = 0; i < 5; i++) {
-
-            System.out.println("Bus No: " + response.get(i).lineName + " To " + response.get(i).destinationName + " 🚍, Arrives in " + response.get(i).timeToStation / 60 + " Minutes " + response.get(i).timeToStation % 60 + " Seconds.⏱");
-        }
+                .get(StopPoint.class);
+    
+        System.out.println(stops.stopPoints);
+        
+        
+        
+//        List<BusInfo> response = client.target("https://api.tfl.gov.uk/StopPoint/490008660N/Arrivals")
+//                .request(MediaType.APPLICATION_JSON_TYPE)
+//                .get(new GenericType<List<BusInfo>>() {});
+//
+//        Comparator<BusInfo> compareByTime = Comparator.comparing(BusInfo::getTimeToStation);
+//
+//        response.sort(compareByTime);
+//
+//        for (int i = 0; i < 5; i++) {
+//
+//            System.out.println("Bus No: " + response.get(i).lineName + " To " + response.get(i).destinationName + " 🚍, Arrives in " + response.get(i).timeToStation / 60 + " Minutes " + response.get(i).timeToStation % 60 + " Seconds.⏱");
+//        }
 
     }
 
