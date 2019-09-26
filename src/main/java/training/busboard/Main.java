@@ -22,15 +22,9 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String args[]) throws KeyManagementException, NoSuchAlgorithmException {
-        Boolean zee = true;
-        while (zee) {
-            try {
-                findMyBus();
-                zee = false;
-            } catch (Exception e) {
-                System.out.println("Please enter a LONDON ");
-            }
-        }
+       
+         findMyBus();
+         
     }
 
 
@@ -51,6 +45,11 @@ public class Main {
             public void checkServerTrusted(X509Certificate[] arg0, String arg1) {}
             public X509Certificate[] getAcceptedIssuers() { return new X509Certificate[0]; }
         }}, new java.security.SecureRandom());
+        
+        Boolean zee = true;
+        while (zee) {
+        try {
+        
         Scanner myObj = new Scanner(System.in);
     
         System.out.println("Enter postcode");
@@ -89,6 +88,11 @@ public class Main {
         for (int i = 0; i < 5; i++) {
         
             System.out.println("Bus No: " + response.get(i).lineName + " To " + response.get(i).destinationName + " 🚍, Arrives in " + response.get(i).timeToStation / 60 + " Minutes " + response.get(i).timeToStation % 60 + " Seconds. ⏱");
+        }
+            zee = false;
+        } catch (Exception e) {
+            System.out.println("Please enter a LONDON ");
+        }
         }
         
     }
