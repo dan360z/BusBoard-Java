@@ -7,10 +7,14 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MediaType;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
+import java.util.List;
 import java.util.Scanner;
+
 
 public class Main {
 
@@ -29,16 +33,17 @@ public class Main {
             public X509Certificate[] getAcceptedIssuers() { return new X509Certificate[0]; }
         }}, new java.security.SecureRandom());
 
-        Scanner myObj = new Scanner(System.in);
+        /*Scanner myObj = new Scanner(System.in);
         System.out.println("Enter code");
 
-        String userInput = myObj.nextLine();
+        String userInput = myObj.nextLine();*/
 
         Client client = ClientBuilder.newBuilder().register(JacksonFeature.class).sslContext(sslcontext).hostnameVerifier((s1, s2) -> true).build();
-        String response = client.target("https://api.tfl.gov.uk/StopPoint/" + userInput + "/Arrivals")
-                .request("text/json")
-                .get(String.class);
+        List<BusInfo> response = client.target("https://api.tfl.gov.uk/StopPoint/490008660N/Arrivals")
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .get(new GenericType<List<BusInfo>>() {});
 //490008660N
-        System.out.println(response);
+        System.out.println(response.get(0).lineId);
     }
+
 }
