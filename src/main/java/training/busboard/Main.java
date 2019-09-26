@@ -36,42 +36,43 @@ public class Main {
             public X509Certificate[] getAcceptedIssuers() { return new X509Certificate[0]; }
         }}, new java.security.SecureRandom());
 
-        /*Scanner myObj = new Scanner(System.in);
-        System.out.println("Enter code");
 
-        String userInput = myObj.nextLine();*/
+        Scanner myObj = new Scanner(System.in);
+        System.out.println("Enter postcode");
 
-        //api.postcodes.io/postcodes/po203xb
+        String userInput = myObj.nextLine();
+
 
         Client client = ClientBuilder.newBuilder().register(JacksonFeature.class).sslContext(sslcontext).hostnameVerifier((s1, s2) -> true).build();
 
-        Postcode postCode = client.target("https://api.postcodes.io/postcodes/po203xb")
+        Postcode postCode = client.target("https://api.postcodes.io/postcodes/" + userInput)
                 .request(MediaType.APPLICATION_JSON_TYPE)
                 .get(Postcode.class);
 
-        System.out.println(postCode.result.latitude);
-        System.out.println(postCode.result.longitude);
-        
-        //NaptanID
-        StopPoint stops = client.target("https://api.tfl.gov.uk/StopPoint?stopTypes=NaptanPublicBusCoachTram&lat=51.553935&lon=-0.144754")
+        String lat = postCode.result.latitude;
+        String lon = postCode.result.longitude;
+
+
+        StopPoint stops = client.target("https://api.tfl.gov.uk/StopPoint?stopTypes=NaptanPublicBusCoachTram&lat=" + lat + "&lon=" + lon)
                 .request(MediaType.APPLICATION_JSON_TYPE)
                 .get(StopPoint.class);
     
-        System.out.println(stops.stopPoints.get(1).naptanId);
+        String naptanId = stops.stopPoints.get(1).naptanId;
         
-        
-        
-        List<BusInfo> response = client.target("https://api.tfl.gov.uk/StopPoint/490008660N/Arrivals")
+
+        List<BusInfo> response = client.target("https://api.tfl.gov.uk/StopPoint/" + naptanId + "/Arrivals")
                 .request(MediaType.APPLICATION_JSON_TYPE)
                 .get(new GenericType<List<BusInfo>>() {});
+
 
         Comparator<BusInfo> compareByTime = Comparator.comparing(BusInfo::getTimeToStation);
 
         response.sort(compareByTime);
 
+
         for (int i = 0; i < 5; i++) {
 
-            System.out.println("Bus No: " + response.get(i).lineName + " To " + response.get(i).destinationName + " 🚍, Arrives in " + response.get(i).timeToStation / 60 + " Minutes " + response.get(i).timeToStation % 60 + " Seconds.⏱");
+            System.out.println("Bus No: " + response.get(i).lineName + " To " + response.get(i).destinationName + " 🚍, Arrives in " + response.get(i).timeToStation / 60 + " Minutes " + response.get(i).timeToStation % 60 + " Seconds. ⏱");
         }
 
     }
