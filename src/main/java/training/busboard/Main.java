@@ -49,7 +49,10 @@ public class Main {
                 .request(MediaType.APPLICATION_JSON_TYPE)
                 .get(Postcode.class);
 
-        System.out.println(postCode.result.country);
+        System.out.println(postCode.result.latitude);
+        System.out.println(postCode.result.longitude);
+
+
 
         List<BusInfo> response = client.target("https://api.tfl.gov.uk/StopPoint/490008660N/Arrivals")
                 .request(MediaType.APPLICATION_JSON_TYPE)

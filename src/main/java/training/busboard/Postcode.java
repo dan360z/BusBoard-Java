@@ -13,5 +13,6 @@ class Postcode {
 @JsonIgnoreProperties(ignoreUnknown = true)
 
 class Results {
-    public String country;
+    public String longitude;
+    public String latitude;
 };
