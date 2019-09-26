@@ -7,9 +7,11 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 
 class Postcode {
-    Results result;
+    public Results result;
 }
 
+@JsonIgnoreProperties(ignoreUnknown = true)
+
 class Results {
-    String country;
+    public String country;
 };
