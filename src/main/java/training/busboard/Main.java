@@ -45,7 +45,7 @@ public class Main {
 
         Client client = ClientBuilder.newBuilder().register(JacksonFeature.class).sslContext(sslcontext).hostnameVerifier((s1, s2) -> true).build();
 
-        Postcode postCode = client.target("https://api.postcodes.io/postcodes/" + userInput)
+        Postcode postCode = client.target("https://api.postcodes.io/postcodes/" + userInput.toLowerCase())
                 .request(MediaType.APPLICATION_JSON_TYPE)
                 .get(Postcode.class);
 
