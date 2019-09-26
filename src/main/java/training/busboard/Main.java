@@ -45,11 +45,8 @@ public class Main {
 
 
         for (int i = 0; i < 5; i++) {
-//            int timeToStationMins = response.get(0).timeToStation / 60;
-//            int timeToStationSeconds = response.get(0).timeToStation % 60;
-//            String timeToStation = Integer.toString(timeToStationMins)  + " Mins " + Integer.toString(timeToStationSeconds) + " Seconds";
 
-            System.out.println("Bus No: " + response.get(i).lineName + " 🚍, Time to station: " + response.get(i).timeToStation / 60 + " ⏱, Arrives at: " + response.get(i).expectedArrival + " ⏱");
+            System.out.println("Bus No: " + response.get(i).lineName + " 🚍, Time to station: " + response.get(i).timeToStation / 60 + " Mins " + response.get(i).timeToStation % 60 + " Seconds" + " ⏱, Arrives at: " + response.get(i).expectedArrival + " ⏱");
         }
 
     }
