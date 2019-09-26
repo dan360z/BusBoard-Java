@@ -6,6 +6,11 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 class BusInfo {
     public String lineName;
+    public String destinationName;
     public int timeToStation;
-    public String expectedArrival;
+
+
+    public int getTimeToStation() {
+        return timeToStation;
+    }
 }

@@ -12,6 +12,9 @@ import javax.ws.rs.core.MediaType;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -43,10 +46,13 @@ public class Main {
                 .request(MediaType.APPLICATION_JSON_TYPE)
                 .get(new GenericType<List<BusInfo>>() {});
 
+        Comparator<BusInfo> compareByTime = Comparator.comparing(BusInfo::getTimeToStation);
+
+        response.sort(compareByTime);
 
         for (int i = 0; i < 5; i++) {
 
-            System.out.println("Bus No: " + response.get(i).lineName + " 🚍, Time to station: " + response.get(i).timeToStation / 60 + " Mins " + response.get(i).timeToStation % 60 + " Seconds" + " ⏱, Arrives at: " + response.get(i).expectedArrival + " ⏱");
+            System.out.println("Bus No: " + response.get(i).lineName + " To " + response.get(i).destinationName + " 🚍, In " + response.get(i).timeToStation / 60 + " Minutes " + response.get(i).timeToStation % 60 + " Seconds.⏱");
         }
 
     }
