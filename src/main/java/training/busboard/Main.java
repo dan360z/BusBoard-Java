@@ -41,7 +41,16 @@ public class Main {
 
         String userInput = myObj.nextLine();*/
 
+        //api.postcodes.io/postcodes/po203xb
+
         Client client = ClientBuilder.newBuilder().register(JacksonFeature.class).sslContext(sslcontext).hostnameVerifier((s1, s2) -> true).build();
+
+        Postcode postCode = client.target("https://api.postcodes.io/postcodes/po203xb")
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .get(Postcode.class);
+
+        System.out.println(postCode.result.country);
+
         List<BusInfo> response = client.target("https://api.tfl.gov.uk/StopPoint/490008660N/Arrivals")
                 .request(MediaType.APPLICATION_JSON_TYPE)
                 .get(new GenericType<List<BusInfo>>() {});
@@ -52,7 +61,7 @@ public class Main {
 
         for (int i = 0; i < 5; i++) {
 
-            System.out.println("Bus No: " + response.get(i).lineName + " To " + response.get(i).destinationName + " 🚍, In " + response.get(i).timeToStation / 60 + " Minutes " + response.get(i).timeToStation % 60 + " Seconds.⏱");
+            System.out.println("Bus No: " + response.get(i).lineName + " To " + response.get(i).destinationName + " 🚍, Arrives in " + response.get(i).timeToStation / 60 + " Minutes " + response.get(i).timeToStation % 60 + " Seconds.⏱");
         }
 
     }

@@ -9,7 +9,6 @@ class BusInfo {
     public String destinationName;
     public int timeToStation;
 
-
     public int getTimeToStation() {
         return timeToStation;
     }
