@@ -43,14 +43,13 @@ public class Main {
                 .request(MediaType.APPLICATION_JSON_TYPE)
                 .get(new GenericType<List<BusInfo>>() {});
 
-        int timeToStationMins = Integer.parseInt(response.get(0).timeToStation) / 60;
-        int timeToStationSeconds = Integer.parseInt(response.get(0).timeToStation) % 60;
-        String timeToStation = Integer.toString(timeToStationMins)  + " Mins " + Integer.toString(timeToStationSeconds) + " Seconds";
-        System.out.println(timeToStation);
 
         for (int i = 0; i < 5; i++) {
+//            int timeToStationMins = response.get(0).timeToStation / 60;
+//            int timeToStationSeconds = response.get(0).timeToStation % 60;
+//            String timeToStation = Integer.toString(timeToStationMins)  + " Mins " + Integer.toString(timeToStationSeconds) + " Seconds";
 
-            System.out.println("Bus No: " + response.get(i).lineName + " 🚍, Time to station: " + response.get(i).timeToStation + " ⏱, Arrives at: " + response.get(i).expectedArrival + " ⏱");
+            System.out.println("Bus No: " + response.get(i).lineName + " 🚍, Time to station: " + response.get(i).timeToStation / 60 + " ⏱, Arrives at: " + response.get(i).expectedArrival + " ⏱");
         }
 
     }
