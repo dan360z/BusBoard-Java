@@ -5,7 +5,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 
 class BusInfo {
-    public String Id;
-    public String lineId;
-    public String vehicleID = "hello";
+    public String lineName;
+    public String timeToStation;
+    public String expectedArrival;
 }

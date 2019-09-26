@@ -42,8 +42,11 @@ public class Main {
         List<BusInfo> response = client.target("https://api.tfl.gov.uk/StopPoint/490008660N/Arrivals")
                 .request(MediaType.APPLICATION_JSON_TYPE)
                 .get(new GenericType<List<BusInfo>>() {});
-//490008660N
-        System.out.println(response.get(0).lineId);
+
+        for (int i = 0; i < 5; i++) {
+            System.out.println("Bus No: " + response.get(i).lineName + " 🚍, Time to station: " + response.get(i).timeToStation + " ⏱, Arrives at: " + response.get(i).expectedArrival + " ⏱");
+        }
+
     }
 
 }
