@@ -38,59 +38,73 @@ public class Main {
         SSLContext sslcontext = SSLContext.getInstance("TLS");
     
         sslcontext.init(null, new TrustManager[]{new X509TrustManager() {
-            public void checkClientTrusted(X509Certificate[] arg0, String arg1) {}
-            public void checkServerTrusted(X509Certificate[] arg0, String arg1) {}
-            public X509Certificate[] getAcceptedIssuers() { return new X509Certificate[0]; }
-        }}, new java.security.SecureRandom());
-        
-        Boolean zee = true;
-        while (zee) {
-        try {
-        
-        Scanner myObj = new Scanner(System.in);
-    
-        System.out.println("Enter postcode");
-    
-    
-        String userInput = myObj.nextLine();
-    
-    
-        Client client = ClientBuilder.newBuilder().register(JacksonFeature.class).sslContext(sslcontext).hostnameVerifier((s1, s2) -> true).build();
+            public void checkClientTrusted(X509Certificate[] arg0, String arg1) {
+            }
 
-        Postcode postCode = client.target("https://api.postcodes.io/postcodes/" + userInput.toLowerCase())
+            public void checkServerTrusted(X509Certificate[] arg0, String arg1) {
+            }
 
-                .request(MediaType.APPLICATION_JSON_TYPE)
-                .get(Postcode.class);
-    
-        String lat = postCode.result.latitude;
-        String lon = postCode.result.longitude;
-    
-    
-        StopPoint stops = client.target("https://api.tfl.gov.uk/StopPoint?stopTypes=NaptanPublicBusCoachTram&lat=" + lat + "&lon=" + lon)
-                .request(MediaType.APPLICATION_JSON_TYPE)
-                .get(StopPoint.class);
-    
-        String naptanId = stops.stopPoints.get(1).naptanId;
-    
-    
-        List<BusInfo> response = client.target("https://api.tfl.gov.uk/StopPoint/" + naptanId + "/Arrivals")
-                .request(MediaType.APPLICATION_JSON_TYPE)
-                .get(new GenericType<List<BusInfo>>() {});
-    
-    
-        Comparator<BusInfo> compareByTime = Comparator.comparing(BusInfo::getTimeToStation);
-    
-        response.sort(compareByTime);
-    
-    
-        for (int i = 0; i < 5; i++) {
-        
-            System.out.println("Bus No: " + response.get(i).lineName + " To " + response.get(i).destinationName + " 🚍, Arrives in " + response.get(i).timeToStation / 60 + " Minutes " + response.get(i).timeToStation % 60 + " Seconds. ⏱");
+            public X509Certificate[] getAcceptedIssuers() {
+                return new X509Certificate[0];
+            }
         }
-            zee = false;
-        } catch (Exception e) {
-            System.out.println("Please enter a LONDON ");
-        }
+        }, new java.security.SecureRandom());
+
+
+        Boolean running = true;
+
+        while (running) {
+
+            try {
+
+                Scanner myObj = new Scanner(System.in);
+
+                System.out.println("Enter postcode");
+
+
+                String userInput = myObj.nextLine();
+
+
+                Client client = ClientBuilder.newBuilder().register(JacksonFeature.class).sslContext(sslcontext).hostnameVerifier((s1, s2) -> true).build();
+
+                Postcode postCode = client.target("https://api.postcodes.io/postcodes/" + userInput.toLowerCase())
+
+                        .request(MediaType.APPLICATION_JSON_TYPE)
+                        .get(Postcode.class);
+
+                String lat = postCode.result.latitude;
+                String lon = postCode.result.longitude;
+
+
+                StopPoint stops = client.target("https://api.tfl.gov.uk/StopPoint?stopTypes=NaptanPublicBusCoachTram&lat=" + lat + "&lon=" + lon)
+                        .request(MediaType.APPLICATION_JSON_TYPE)
+                        .get(StopPoint.class);
+
+                String naptanId = stops.stopPoints.get(1).naptanId;
+
+
+                List<BusInfo> response = client.target("https://api.tfl.gov.uk/StopPoint/" + naptanId + "/Arrivals")
+                        .request(MediaType.APPLICATION_JSON_TYPE)
+                        .get(new GenericType<List<BusInfo>>() {
+                        });
+
+
+                Comparator<BusInfo> compareByTime = Comparator.comparing(BusInfo::getTimeToStation);
+
+                response.sort(compareByTime);
+
+
+                for (int i = 0; i < 5; i++) {
+
+                    System.out.println("Bus No: " + response.get(i).lineName + " To " + response.get(i).destinationName + " 🚍, Arrives in " + response.get(i).timeToStation / 60 + " Minutes " + response.get(i).timeToStation % 60 + " Seconds. ⏱");
+                }
+
+                running = false;
+
+            } catch (Exception e) {
+                System.out.println("Please enter a London postcode");
+            }
+
         }
         
     }
