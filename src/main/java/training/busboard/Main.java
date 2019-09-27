@@ -22,7 +22,7 @@ public class Main {
 
         PostcodeResults postCode = new PostcodeResults();
 
-        Results postcodeResult = PostcodeResults.postCodeResult(userInput);
+        Results postcodeResult = postCode.postCodeResult(userInput);
 
         TFL tflClient = new TFL();
 

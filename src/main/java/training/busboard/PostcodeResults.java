@@ -14,31 +14,8 @@ import java.security.cert.X509Certificate;
 
 public class PostcodeResults {
 
-    private static SSLContext getSSLContext() throws KeyManagementException, NoSuchAlgorithmException {
-        SSLContext sslcontext = SSLContext.getInstance("TLS");
-        sslcontext.init(null, new TrustManager[]{new X509TrustManager() {
-            public void checkClientTrusted(X509Certificate[] arg0, String arg1) {
-            }
-
-            public void checkServerTrusted(X509Certificate[] arg0, String arg1) {
-            }
-
-            public X509Certificate[] getAcceptedIssuers() {
-                return new X509Certificate[0];
-            }
-        }
-        }, new java.security.SecureRandom());
-        return sslcontext;
-    }
-
-    private static Client getClient() throws NoSuchAlgorithmException, KeyManagementException {
-        SSLContext sslContext = getSSLContext();
-        Client client = ClientBuilder.newBuilder().register(JacksonFeature.class).sslContext(sslContext).hostnameVerifier((s1, s2) -> true).build();
-        return client;
-    }
-
     static Results postCodeResult(String userInput) throws KeyManagementException, NoSuchAlgorithmException {
-        Client client = getClient();
+        Client client = new SslContextAndClient().getClient();
         Postcode postCode = client.target("https://api.postcodes.io/postcodes/" + userInput.toLowerCase())
 
                 .request(MediaType.APPLICATION_JSON_TYPE)
