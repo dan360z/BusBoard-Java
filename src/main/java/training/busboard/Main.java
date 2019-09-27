@@ -12,8 +12,6 @@ import javax.ws.rs.core.MediaType;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
@@ -27,16 +25,33 @@ public class Main {
          
     }
 
-
     public static void findMyBus() throws KeyManagementException, NoSuchAlgorithmException{
-    
+
+        setProxySettings();
+
+        String userInput = run();
+
+        Results postcodeResult = postCodeResult(userInput);
+
+        TFL tflClient = new TFL();
+
+        String naptanId = tflClient.getNaptanId(postcodeResult.latitude, postcodeResult.longitude);
+
+        List <BusInfo> response = tflClient.getOrderedBusInfo(naptanId);
+
+        printNextFiveBusses(response);
+
+    }
+
+    private static void setProxySettings(){
         System.setProperty("http.proxyHost", "localhost");
         System.setProperty("http.proxyPort", "9090");
         System.setProperty("https.proxyHost", "localhost");
         System.setProperty("https.proxyPort", "9090");
-    
+    }
+
+    private static SSLContext getSSLContext() throws KeyManagementException, NoSuchAlgorithmException {
         SSLContext sslcontext = SSLContext.getInstance("TLS");
-    
         sslcontext.init(null, new TrustManager[]{new X509TrustManager() {
             public void checkClientTrusted(X509Certificate[] arg0, String arg1) {
             }
@@ -49,64 +64,36 @@ public class Main {
             }
         }
         }, new java.security.SecureRandom());
-
-
-        Boolean running = true;
-
-        while (running) {
-
-            try {
-
-                Scanner myObj = new Scanner(System.in);
-
-                System.out.println("Enter postcode");
-
-
-                String userInput = myObj.nextLine();
-
-
-                Client client = ClientBuilder.newBuilder().register(JacksonFeature.class).sslContext(sslcontext).hostnameVerifier((s1, s2) -> true).build();
-
-                Postcode postCode = client.target("https://api.postcodes.io/postcodes/" + userInput.toLowerCase())
-
-                        .request(MediaType.APPLICATION_JSON_TYPE)
-                        .get(Postcode.class);
-
-                String lat = postCode.result.latitude;
-                String lon = postCode.result.longitude;
-
-
-                StopPoint stops = client.target("https://api.tfl.gov.uk/StopPoint?stopTypes=NaptanPublicBusCoachTram&lat=" + lat + "&lon=" + lon)
-                        .request(MediaType.APPLICATION_JSON_TYPE)
-                        .get(StopPoint.class);
-
-                String naptanId = stops.stopPoints.get(1).naptanId;
-
-
-                List<BusInfo> response = client.target("https://api.tfl.gov.uk/StopPoint/" + naptanId + "/Arrivals")
-                        .request(MediaType.APPLICATION_JSON_TYPE)
-                        .get(new GenericType<List<BusInfo>>() {
-                        });
-
-
-                Comparator<BusInfo> compareByTime = Comparator.comparing(BusInfo::getTimeToStation);
-
-                response.sort(compareByTime);
-
-
-                for (int i = 0; i < 5; i++) {
-
-                    System.out.println("Bus No: " + response.get(i).lineName + " To " + response.get(i).destinationName + " 🚍, Arrives in " + response.get(i).timeToStation / 60 + " Minutes " + response.get(i).timeToStation % 60 + " Seconds. ⏱");
-                }
-
-                running = false;
-
-            } catch (Exception e) {
-                System.out.println("Please enter a London postcode");
-            }
-
-        }
-        
+        return sslcontext;
     }
 
+    private static Client getClient() throws NoSuchAlgorithmException, KeyManagementException {
+        SSLContext sslContext = getSSLContext();
+        Client client = ClientBuilder.newBuilder().register(JacksonFeature.class).sslContext(sslContext).hostnameVerifier((s1, s2) -> true).build();
+        return client;
+    }
+
+    private static String run() {
+        Scanner myObj = new Scanner(System.in);
+
+        System.out.println("Enter postcode");
+
+       return myObj.nextLine();
+    }
+
+    private static Results postCodeResult(String userInput) throws KeyManagementException, NoSuchAlgorithmException {
+        Client client = getClient();
+        Postcode postCode = client.target("https://api.postcodes.io/postcodes/" + userInput.toLowerCase())
+
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .get(Postcode.class);
+
+        return postCode.result;
+    }
+
+    private static void printNextFiveBusses(List<BusInfo> response) {
+        for (int i = 0; i < 5; i++) {
+            System.out.println("Bus No: " + response.get(i).lineName + " To " + response.get(i).destinationName + " 🚍, Arrives in " + response.get(i).timeToStation / 60 + " Minutes " + response.get(i).timeToStation % 60 + " Seconds. ⏱");
+        }
+    }
 }
