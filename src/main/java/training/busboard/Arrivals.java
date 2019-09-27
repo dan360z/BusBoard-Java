@@ -4,7 +4,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 
-class BusInfo {
+public class Arrivals {
     public String lineName;
     public String destinationName;
     public int timeToStation;

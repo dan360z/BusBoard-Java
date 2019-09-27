@@ -28,7 +28,7 @@ public class Main {
 
         String naptanId = tflClient.getNaptanId(postcodeResult.latitude, postcodeResult.longitude);
 
-        List <BusInfo> response = tflClient.getOrderedBusInfo(naptanId);
+        List <Arrivals> response = tflClient.getOrderedBusInfo(naptanId);
 
         printNextFiveBusses(response);
 
@@ -49,7 +49,7 @@ public class Main {
        return myObj.nextLine();
     }
 
-    private static void printNextFiveBusses(List<BusInfo> response) {
+    private static void printNextFiveBusses(List<Arrivals> response) {
         for (int i = 0; i < 5; i++) {
             System.out.println("Bus No: " + response.get(i).lineName + " To " + response.get(i).destinationName + " 🚍, Arrives in " + response.get(i).timeToStation / 60 + " Minutes " + response.get(i).timeToStation % 60 + " Seconds. ⏱");
         }
