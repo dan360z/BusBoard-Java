@@ -13,11 +13,15 @@ public class Website {
 
     @RequestMapping("/")
     ModelAndView home() {
+
         return new ModelAndView("index");
     }
 
     @RequestMapping("/busInfo")
     ModelAndView busInfo(@RequestParam("postcode") String postcode) {
+
+        String info = new BusInfo(postcode);
+
         return new ModelAndView("info", "busInfo", new BusInfo(postcode)) ;
     }
 
