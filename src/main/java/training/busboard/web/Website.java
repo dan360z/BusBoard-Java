@@ -38,8 +38,13 @@ public class Website {
 
         List<BusArrival> response = tflClient.getOrderedBusInfo(naptanId);
 
+        List<BusInfo> buses = null;
 
-        return new ModelAndView("info", "busInfo", new BusInfo(postcode, response.get(0).lineName)) ;
+        for (int i = 0; i < 5; i ++) {
+            buses.add(new BusInfo(postcode, response.get(i).lineName, response.get(i).destinationName, response.get(i).timeToStation));
+        }
+
+        return new ModelAndView("info", "busInfo", buses ) ;
     }
 
     public static void main(String[] args) throws Exception {
