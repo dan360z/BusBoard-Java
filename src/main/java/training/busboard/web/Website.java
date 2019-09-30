@@ -13,6 +13,7 @@ import training.busboard.TFL;
 
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static training.busboard.Main.setProxySettings;
@@ -38,13 +39,7 @@ public class Website {
 
         List<BusArrival> response = tflClient.getOrderedBusInfo(naptanId);
 
-        List<BusInfo> buses = null;
-
-        for (int i = 0; i < 5; i ++) {
-            buses.add(new BusInfo(postcode, response.get(i).lineName, response.get(i).destinationName, response.get(i).timeToStation));
-        }
-
-        return new ModelAndView("info", "busInfo", buses ) ;
+        return new ModelAndView("info", "busInfo", new BusInfo(postcode, response) ) ;
     }
 
     public static void main(String[] args) throws Exception {

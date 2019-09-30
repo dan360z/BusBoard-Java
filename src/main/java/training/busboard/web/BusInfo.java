@@ -1,29 +1,22 @@
 package training.busboard.web;
 
+import training.busboard.BusArrival;
+
+import java.util.List;
+
 public class BusInfo {
     
     private final String postcode;
-    private final String lineName;
-    private final String destinationName;
-    private final int timeToStation;
+    private final List<BusArrival> buses;
 
-    public BusInfo(String postcode, String lineName, String destinationName, int timeToStation) {
+    public BusInfo(String postcode, List<BusArrival> buses) {
         this.postcode = postcode;
-        this.lineName = lineName;
-        this.destinationName = destinationName;
-        this.timeToStation = timeToStation;
+        this.buses = buses;
     }
     public String getPostcode() {
         return postcode;
     }
-    public String getLineName() {
-        return lineName;
-    }
-    public String getDestinationName() {
-        return destinationName;
-    }
-    public int getTimeToStation() {
-
-        return timeToStation;
+    public List<BusArrival> getBuses() {
+        return buses;
     }
 }
