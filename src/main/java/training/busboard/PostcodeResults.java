@@ -7,7 +7,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class PostcodeResults {
 
-    static Results postCodeResult(String userInput) throws KeyManagementException, NoSuchAlgorithmException {
+    public static Results postCodeResult(String userInput) throws KeyManagementException, NoSuchAlgorithmException {
         Client client = new SslContextAndClient().getClient();
         Postcode postCode = client.target("https://api.postcodes.io/postcodes/" + userInput.toLowerCase())
 

@@ -20,21 +20,19 @@ public class Main {
 
         String userInput = run();
 
-        PostcodeResults postCode = new PostcodeResults();
-
-        Results postcodeResult = postCode.postCodeResult(userInput);
+        Results postcodeResult = PostcodeResults.postCodeResult(userInput);
 
         TFL tflClient = new TFL();
 
         String naptanId = tflClient.getNaptanId(postcodeResult.latitude, postcodeResult.longitude);
 
-        List <BusInfo> response = tflClient.getOrderedBusInfo(naptanId);
+        List <BusArrival> response = tflClient.getOrderedBusInfo(naptanId);
 
         printNextFiveBusses(response);
 
     }
 
-    private static void setProxySettings(){
+    public static void setProxySettings(){
         System.setProperty("http.proxyHost", "localhost");
         System.setProperty("http.proxyPort", "9090");
         System.setProperty("https.proxyHost", "localhost");
@@ -49,7 +47,7 @@ public class Main {
        return myObj.nextLine();
     }
 
-    private static void printNextFiveBusses(List<BusInfo> response) {
+    private static void printNextFiveBusses(List<BusArrival> response) {
         for (int i = 0; i < 5; i++) {
             System.out.println("Bus No: " + response.get(i).lineName + " To " + response.get(i).destinationName + " 🚍, Arrives in " + response.get(i).timeToStation / 60 + " Minutes " + response.get(i).timeToStation % 60 + " Seconds. ⏱");
         }

@@ -19,14 +19,14 @@ public class TFL {
         return stops.stopPoints.get(1).naptanId;
     }
 
-    public List<BusInfo> getOrderedBusInfo(String naptanId) throws KeyManagementException, NoSuchAlgorithmException {
+    public List<BusArrival> getOrderedBusInfo(String naptanId) throws KeyManagementException, NoSuchAlgorithmException {
         Client client = new SslContextAndClient().getClient();
-        List<BusInfo> response = client.target("https://api.tfl.gov.uk/StopPoint/" + naptanId + "/Arrivals")
+        List<BusArrival> response = client.target("https://api.tfl.gov.uk/StopPoint/" + naptanId + "/Arrivals")
                 .request(MediaType.APPLICATION_JSON_TYPE)
-                .get(new GenericType<List<BusInfo>>() {
+                .get(new GenericType<List<BusArrival>>() {
                 });
-        Comparator<BusInfo> compareByTime = Comparator.comparing(BusInfo::getTimeToStation);
 
+        Comparator<BusArrival> compareByTime = Comparator.comparing(BusArrival::getTimeToStation);
         response.sort(compareByTime);
 
         return response;
