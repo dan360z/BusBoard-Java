@@ -13,9 +13,10 @@
             <h2>Bus Information</h2>
             <div>
                 <p>You entered postcode <span th:text="${busInfo.postcode}"></span></p>
-                <tr th:each="student: ${students}">
-                    <td th:text="${student.id}" />
-                    <td th:text="${student.name}" />
+                <tr th:each="bus: ${busInfo.buses}">
+                    <td th:text="${bus.lineName}" />
+                    <td th:text="${bus.destinationName}" />
+                    <td th:text="${bus.timeToStation}" />
                 </tr>
             </div>
         </div>
