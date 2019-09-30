@@ -10,15 +10,15 @@
 <div layout:fragment="content" class="container body-content">
     <div class="jumbotron">
         <h1>BusBoard</h1>
-        <p class="lead">For all your bus info needs. Enter a postcode below and click enter to see bus times for that location.</p>
+        <h3 class="lead">For all your bus info needs. Enter a postcode below and click enter to see bus times for that location.</h3>
     </div>
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 text-center">
             <form id="messageForm" th:action="@{/busInfo}" method="get">
                 <fieldset>
                     <legend>Postcode: </legend>
                     <input type="text" name="postcode">
-                    <input type="submit" value="Get Bus Info" />
+                    <input class="button"  type="submit" value="Get Bus Info" />
                 </fieldset>
             </form>
         </div>

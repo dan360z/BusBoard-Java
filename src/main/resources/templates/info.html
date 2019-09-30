@@ -10,14 +10,16 @@
     </head>
     <body>
         <div layout:fragment="content" class="container body-content">
-            <h2>Bus Information</h2>
+            <div class="jumbotron text-center heading">
+                <h1>Bus Information</h1>
+                <h5 class="postcode-wrapper">You entered postcode <span class="postcode" th:text="${busInfo.postcode}"></span></h5>
+            </div>
             <div>
-                <p>You entered postcode <span th:text="${busInfo.postcode}"></span></p>
-                <tr th:each="bus: ${busInfo.buses}">
-                    <td th:text="${bus.lineName}" />
-                    <td th:text="${bus.destinationName}" />
-                    <td th:text="${bus.timeToStation}" />
-                </tr>
+                <p class="col-6 bus-info" th:each="bus: ${busInfo.buses}">
+                    <i class="fas fa-bus"></i>
+                    Bus No: <span th:text="${bus.lineName}"></span> to <span th:text="${bus.destinationName}"></span>
+                    Arrives in <span th:text="${bus.timeToStation / 60}"></span> minutes.
+                </p>
             </div>
         </div>
     </body>
